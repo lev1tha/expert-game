@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Кто хочет стать экспертом? | Операционный менеджмент</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0f4f8;
+    --card: #ffffff;
+    --card2: #f8fafc;
+    --border: #e2e8f0;
+    --text: #1e293b;
+    --text2: #64748b;
+    --accent: #6366f1;
+    --accent2: #818cf8;
+    --accent-light: #eef2ff;
+    --gold: #f59e0b;
+    --gold-light: #fef3c7;
+    --green: #10b981;
+    --green-light: #d1fae5;
+    --red: #ef4444;
+    --red-light: #fee2e2;
+    --shadow: 0 4px 24px rgba(99,102,241,0.08);
+    --shadow2: 0 2px 8px rgba(0,0,0,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .screen { display: none; width: 100%; max-width: 820px; padding: 2rem 1rem; }
+  .screen.active { display: flex; flex-direction: column; align-items: center; }
+
+  /* ── START ── */
+  .start-hero {
+    text-align: center; padding: 3rem 2rem 2rem;
+    background: var(--card); border-radius: 24px;
+    box-shadow: var(--shadow); border: 1px solid var(--border);
+    width: 100%; max-width: 600px;
+  }
+  .trophy-icon {
+    width: 80px; height: 80px; background: var(--gold-light);
+    border-radius: 50%; display: flex; align-items: center;
+    justify-content: center; margin: 0 auto 1.5rem; font-size: 36px;
+  }
+  .start-hero h1 { font-size: 1.8rem; font-weight: 800; line-height: 1.3; margin-bottom: 0.5rem; }
+  .start-hero h1 span { color: var(--accent); }
+  .start-hero p { color: var(--text2); font-size: 1rem; line-height: 1.6; margin-bottom: 2rem; }
+
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
+  .info-card {
+    background: var(--card2); border: 1px solid var(--border);
+    border-radius: 14px; padding: 1rem; text-align: center;
+  }
+  .info-card .icon { font-size: 24px; margin-bottom: 0.4rem; }
+  .info-card .label { font-size: 0.75rem; color: var(--text2); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+  .info-card .val { font-size: 1.1rem; font-weight: 800; color: var(--text); }
+
+  .topics-list {
+    background: var(--card2); border: 1px solid var(--border);
+    border-radius: 14px; padding: 1rem 1.25rem; text-align: left; margin-bottom: 2rem;
+  }
+  .topics-list h3 { font-size: 0.8rem; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; }
+  .topic-tag {
+    display: inline-block; background: var(--accent-light); color: var(--accent);
+    border-radius: 20px; padding: 0.3rem 0.8rem;
+    font-size: 0.8rem; font-weight: 600; margin: 0.2rem;
+  }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    padding: 0.875rem 2rem; border-radius: 14px; border: none;
+    font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 4px 16px rgba(99,102,241,0.3); }
+  .btn-primary:hover { background: #4f46e5; transform: translateY(-2px); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-lg { padding: 1rem 2.5rem; font-size: 1.1rem; width: 100%; max-width: 320px; }
+  .btn-sm { padding: 0.5rem 1.2rem; font-size: 0.875rem; }
+  .btn-outline { background: transparent; color: var(--text2); border: 1px solid var(--border); }
+  .btn-outline:hover { background: var(--card2); }
+
+  /* ── GAME HEADER ── */
+  .game-header {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; margin-bottom: 1.5rem;
+    background: var(--card); border-radius: 16px;
+    padding: 0.875rem 1.25rem;
+    border: 1px solid var(--border); box-shadow: var(--shadow2);
+  }
+  .progress-wrap { flex: 1; }
+  .progress-label { font-size: 0.75rem; color: var(--text2); font-weight: 600; margin-bottom: 0.3rem; }
+  .progress-bar-bg { height: 8px; background: var(--bg); border-radius: 99px; overflow: hidden; }
+  .progress-bar-fill {
+    height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 99px; transition: width 0.5s ease;
+  }
+  .score-badge {
+    background: var(--gold-light); color: #92400e;
+    border-radius: 12px; padding: 0.5rem 1rem;
+    font-weight: 800; font-size: 1rem; margin-left: 1rem; white-space: nowrap;
+  }
+  .q-counter { font-size: 0.8rem; color: var(--text2); font-weight: 600; margin-left: 0.75rem; white-space: nowrap; }
+
+  /* ── QUESTION CARD ── */
+  .question-card {
+    width: 100%; background: var(--card); border-radius: 20px;
+    padding: 2rem; margin-bottom: 1.5rem;
+    border: 1px solid var(--border); box-shadow: var(--shadow);
+  }
+  .q-meta {
+    display: flex; align-items: center; gap: 0.5rem;
+    margin-bottom: 1rem; flex-wrap: wrap;
+  }
+  .q-category {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    background: var(--accent-light); color: var(--accent);
+    border-radius: 20px; padding: 0.3rem 0.8rem;
+    font-size: 0.75rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  /* badge for question type */
+  .q-type-badge {
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    border-radius: 20px; padding: 0.3rem 0.8rem;
+    font-size: 0.72rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .q-type-badge.trick { background: #fef3c7; color: #92400e; }
+  .q-type-badge.multi { background: #d1fae5; color: #065f46; }
+
+  .q-text { font-size: 1.1rem; font-weight: 600; line-height: 1.6; color: var(--text); }
+
+  /* multi-select hint */
+  .multi-hint {
+    font-size: 0.82rem; color: var(--text2); font-style: italic;
+    margin-top: 0.5rem; display: none;
+  }
+  .multi-hint.show { display: block; }
+
+  /* ── ANSWERS ── */
+  .answers-grid { display: grid; gap: 0.75rem; width: 100%; }
+
+  .answer-btn {
+    background: var(--card); border: 1.5px solid var(--border);
+    border-radius: 14px; padding: 0.9rem 1.25rem;
+    text-align: left; cursor: pointer;
+    font-family: 'Nunito', sans-serif; font-size: 0.95rem;
+    font-weight: 500; color: var(--text); line-height: 1.5;
+    transition: all 0.18s; display: flex; align-items: flex-start; gap: 0.75rem;
+    box-shadow: var(--shadow2);
+  }
+  .answer-btn:hover:not(:disabled) {
+    border-color: var(--accent2); background: var(--accent-light);
+    transform: translateX(4px);
+  }
+  .answer-btn:disabled { cursor: default; }
+  .answer-btn .letter {
+    min-width: 28px; height: 28px; background: var(--bg); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 0.8rem; color: var(--text2);
+    flex-shrink: 0; margin-top: 1px;
+  }
+
+  /* SELECTED — before reveal: just accent tint, no green/red */
+  .answer-btn.selected {
+    border-color: var(--accent); background: var(--accent-light);
+  }
+  .answer-btn.selected .letter { background: var(--accent); color: #fff; }
+
+  /* REVEALED states — shown only after clicking "Узнать результат" */
+  .answer-btn.reveal-correct { border-color: var(--green); background: var(--green-light); }
+  .answer-btn.reveal-correct .letter { background: var(--green); color: #fff; }
+  .answer-btn.reveal-wrong { border-color: var(--red); background: var(--red-light); }
+  .answer-btn.reveal-wrong .letter { background: var(--red); color: #fff; }
+  .answer-btn.reveal-neutral { border-color: var(--border); background: var(--card2); opacity: 0.6; }
+
+  /* ── FEEDBACK PANEL ── */
+  .answer-feedback {
+    background: var(--card2); border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.1rem 1.25rem;
+    font-size: 0.9rem; line-height: 1.7; color: var(--text2);
+    display: none; width: 100%; margin-top: 0.5rem;
+  }
+  .answer-feedback.show { display: block; animation: fadeSlideIn 0.3s ease; }
+
+  .fb-row { display: flex; flex-direction: column; gap: 0.6rem; }
+  .fb-result {
+    font-weight: 700; font-size: 0.95rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .fb-result.ok { color: var(--green); }
+  .fb-result.partial { color: var(--gold); }
+  .fb-result.bad { color: var(--red); }
+
+  .fb-explanation { color: var(--text); }
+
+  /* wrong choices list */
+  .fb-wrong-list { margin-top: 0.4rem; }
+  .fb-wrong-item {
+    background: var(--red-light); color: #7f1d1d;
+    border-radius: 8px; padding: 0.4rem 0.75rem;
+    font-size: 0.85rem; margin-bottom: 0.3rem;
+    display: flex; align-items: flex-start; gap: 0.4rem;
+  }
+  .fb-wrong-item::before { content: "✗"; font-weight: 800; flex-shrink: 0; }
+
+  /* tip box */
+  .fb-tip {
+    background: var(--gold-light); border-radius: 10px;
+    padding: 0.6rem 0.9rem; font-size: 0.85rem;
+    color: #78350f; display: flex; gap: 0.4rem; align-items: flex-start;
+    margin-top: 0.4rem;
+  }
+  .fb-tip-icon { flex-shrink: 0; font-size: 1rem; }
+
+  .points-badge {
+    display: inline-block;
+    background: var(--gold-light); color: #92400e;
+    border-radius: 8px; padding: 0.2rem 0.6rem;
+    font-weight: 700; font-size: 0.82rem; margin-left: 0.3rem;
+    vertical-align: middle;
+  }
+
+  /* ── FOOTER BUTTONS ── */
+  .game-footer {
+    display: flex; justify-content: space-between;
+    align-items: center; width: 100%; margin-top: 0.75rem; gap: 0.75rem;
+  }
+  .btn-reveal {
+    background: var(--accent); color: #fff;
+    border: none; border-radius: 12px; padding: 0.75rem 1.5rem;
+    font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 700;
+    cursor: pointer; transition: all 0.2s; display: none; flex: 1;
+  }
+  .btn-reveal.show { display: flex; align-items: center; justify-content: center; gap: 0.4rem; }
+  .btn-reveal:hover { background: #4f46e5; }
+
+  .btn-next {
+    background: var(--card); color: var(--text2);
+    border: 1.5px solid var(--border); border-radius: 12px; padding: 0.75rem 1.5rem;
+    font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 700;
+    cursor: pointer; transition: all 0.2s; display: none;
+  }
+  .btn-next.show { display: flex; align-items: center; gap: 0.4rem; }
+  .btn-next:hover { background: var(--card2); border-color: var(--accent2); }
+
+  /* multi-confirm */
+  .btn-confirm {
+    background: var(--accent); color: #fff;
+    border: none; border-radius: 12px; padding: 0.75rem 1.5rem;
+    font-family: 'Nunito', sans-serif; font-size: 1rem; font-weight: 700;
+    cursor: pointer; transition: all 0.2s; display: none; flex: 1;
+  }
+  .btn-confirm.show { display: flex; align-items: center; justify-content: center; gap: 0.4rem; }
+  .btn-confirm:hover { background: #4f46e5; }
+  .btn-confirm:disabled { opacity: 0.45; cursor: default; }
+
+  /* ── LEVELS ── */
+  .levels-sidebar {
+    width: 100%; background: var(--card);
+    border-radius: 16px; padding: 1rem;
+    border: 1px solid var(--border); box-shadow: var(--shadow2);
+    margin-bottom: 1rem;
+  }
+  .levels-title { font-size: 0.75rem; color: var(--text2); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.75rem; }
+  .level-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.35rem 0.6rem; border-radius: 8px;
+    font-size: 0.82rem; font-weight: 600; transition: background 0.2s;
+  }
+  .level-row.current { background: var(--accent-light); color: var(--accent); }
+  .level-row.done { color: var(--green); }
+  .level-row .pts { font-weight: 800; }
+
+  /* ── RESULT ── */
+  .result-card {
+    background: var(--card); border-radius: 24px;
+    padding: 2.5rem 2rem; text-align: center;
+    border: 1px solid var(--border); box-shadow: var(--shadow);
+    width: 100%; max-width: 560px;
+  }
+  .result-icon { font-size: 56px; margin-bottom: 1rem; }
+  .result-card h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem; }
+  .result-card .subtitle { color: var(--text2); margin-bottom: 2rem; }
+  .score-big { font-size: 3.5rem; font-weight: 800; color: var(--accent); line-height: 1; margin-bottom: 0.25rem; }
+  .score-label { color: var(--text2); font-size: 0.9rem; margin-bottom: 2rem; }
+  .grade-bar {
+    background: var(--card2); border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.25rem 1.5rem; margin-bottom: 1.25rem;
+    text-align: left;
+  }
+  .grade-bar h3 { font-size: 1rem; font-weight: 800; margin-bottom: 0.25rem; }
+  .grade-bar p { color: var(--text2); font-size: 0.9rem; line-height: 1.5; }
+
+  /* final tip block */
+  .result-tip {
+    background: var(--gold-light); border: 1px solid #fde68a;
+    border-radius: 14px; padding: 1.1rem 1.25rem;
+    margin-bottom: 1.5rem; text-align: left;
+  }
+  .result-tip h4 { font-size: 0.85rem; font-weight: 800; color: #92400e; margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.05em; }
+  .result-tip p { font-size: 0.88rem; color: #78350f; line-height: 1.6; }
+
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; margin-bottom: 1.5rem; }
+  .stat-box { background: var(--card2); border: 1px solid var(--border); border-radius: 12px; padding: 0.875rem; }
+  .stat-box .num { font-size: 1.4rem; font-weight: 800; }
+  .stat-box .lbl { font-size: 0.75rem; color: var(--text2); font-weight: 600; }
+
+  .result-actions { display: flex; flex-direction: column; gap: 0.75rem; align-items: center; }
+  .mt-1 { margin-top: 0.5rem; }
+
+  @keyframes fadeSlideIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-in { animation: fadeSlideIn 0.35s ease forwards; }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+  }
+  .pulse { animation: pulse 0.5s ease; }
+</style>
+</head>
+<body>
+
+<!-- ════════ START ════════ -->
+<div id="startScreen" class="screen active">
+  <div class="start-hero animate-in">
+    <div class="trophy-icon">🏆</div>
+    <h1>Кто хочет стать<br><span>Экспертом?</span></h1>
+    <p>Проверьте знания в операционном менеджменте, бизнес-процессах, управлении персоналом и качестве сервиса</p>
+    <div class="info-grid">
+      <div class="info-card"><div class="icon">❓</div><div class="label">Вопросов</div><div class="val">30</div></div>
+      <div class="info-card"><div class="icon">⭐</div><div class="label">Макс. балл</div><div class="val">3 000</div></div>
+      <div class="info-card"><div class="icon">🎯</div><div class="label">Вариантов</div><div class="val">4</div></div>
+    </div>
+    <div class="topics-list">
+      <h3>Темы вопросов</h3>
+      <span class="topic-tag">📊 Операционная модель</span>
+      <span class="topic-tag">⚙️ Бизнес-процессы</span>
+      <span class="topic-tag">🏭 Мощности</span>
+      <span class="topic-tag">👥 Персонал</span>
+      <span class="topic-tag">⭐ Качество сервиса</span>
+    </div>
+    <button class="btn btn-primary btn-lg" onclick="startGame()">Начать игру →</button>
+  </div>
+</div>
+
+<!-- ════════ GAME ════════ -->
+<div id="gameScreen" class="screen">
+  <div class="game-header animate-in">
+    <div class="progress-wrap">
+      <div class="progress-label" id="progressLabel">Вопрос 1 из 30</div>
+      <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill" style="width:0%"></div></div>
+    </div>
+    <span class="q-counter" id="qCounter"></span>
+    <div class="score-badge" id="scoreBadge">⭐ 0 баллов</div>
+  </div>
+
+  <div class="levels-sidebar animate-in">
+    <div class="levels-title">🏆 Лестница успеха</div>
+    <div id="levelsDisplay" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.25rem;"></div>
+  </div>
+
+  <div class="question-card animate-in" id="questionCard">
+    <div class="q-meta">
+      <div class="q-category" id="qCategory">📊 Операционная модель</div>
+      <div class="q-type-badge" id="qTypeBadge" style="display:none"></div>
+    </div>
+    <div class="q-text" id="qText">Загрузка...</div>
+    <div class="multi-hint" id="multiHint">Выберите все подходящие варианты, затем нажмите «Подтвердить»</div>
+  </div>
+
+  <div class="answers-grid animate-in" id="answersGrid"></div>
+  <div class="answer-feedback" id="answerFeedback"></div>
+
+  <div class="game-footer">
+    <button class="btn-confirm" id="btnConfirm" onclick="confirmMulti()" disabled>Подтвердить выбор</button>
+    <button class="btn-reveal" id="btnReveal" onclick="revealAnswer()">Узнать результат →</button>
+    <button class="btn-next" id="btnNext" onclick="nextQuestion()">Следующий →</button>
+  </div>
+</div>
+
+<!-- ════════ RESULT ════════ -->
+<div id="resultScreen" class="screen">
+  <div class="result-card animate-in">
+    <div class="result-icon" id="resultIcon">🏆</div>
+    <h2 id="resultTitle">Отличный результат!</h2>
+    <p class="subtitle" id="resultSubtitle">Вы прошли все 30 вопросов</p>
+    <div class="score-big" id="finalScore">0</div>
+    <div class="score-label">баллов из 3 000</div>
+    <div class="grade-bar" id="gradeBar">
+      <h3 id="gradeTitle">Уровень</h3>
+      <p id="gradeDesc">Описание</p>
+    </div>
+    <div class="result-tip" id="resultTip">
+      <h4>💡 Главный совет</h4>
+      <p id="resultTipText"></p>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-box"><div class="num" id="statCorrect" style="color:var(--green)">0</div><div class="lbl">Правильных</div></div>
+      <div class="stat-box"><div class="num" id="statWrong" style="color:var(--red)">0</div><div class="lbl">Ошибок</div></div>
+      <div class="stat-box"><div class="num" id="statAccuracy" style="color:var(--accent)">0%</div><div class="lbl">Точность</div></div>
+    </div>
+    <div class="result-actions">
+      <button class="btn btn-primary btn-lg" onclick="startGame()">🔄 Играть снова</button>
+      <button class="btn btn-outline btn-sm mt-1" onclick="showStart()">На главную</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+//  QUESTION BANK
+//  type: "single"  — один правильный ответ (bestIndex)
+//  type: "multi"   — два правильных (bestIndexes: [i,j])
+//  type: "trick"   — с подвохом (bestIndex, trap: true на "очевидных" неверных)
+//
+//  ПРАВИЛО ДЛИН: все 4 варианта ответа ≈ одной длины (8-14 слов)
+// ══════════════════════════════════════════════════════════
+const QUESTIONS = [
+
+  // ── ОПЕРАЦИОННАЯ МОДЕЛЬ ──
+  {
+    type: "single",
+    category: "📊 Операционная модель",
+    text: "Магазин каждый месяц теряет каждого пятого покупателя. Деньги тратятся на рекламу для новых. Что важнее сделать в первую очередь?",
+    answers: [
+      { text: "Тратить больше денег на рекламу и поиск новых покупателей", pts: 10 },
+      { text: "Сначала понять, почему люди уходят, и устранить эти причины", pts: 100 },
+      { text: "Снизить цены на все товары для повышения лояльности", pts: 40 },
+      { text: "Нанять ещё продавцов для лучшего обслуживания клиентов", pts: 20 }
+    ],
+    bestIndex: 1,
+    explanation: "Привлекать новых клиентов дороже, чем удерживать старых. Пока не устранена причина ухода — деньги на рекламу уходят впустую.",
+    tip: "Принцип: сначала «заткни течь», потом наполняй ведро."
+  },
+  {
+    type: "trick",
+    category: "📊 Операционная модель",
+    text: "Кафе работает хорошо. Конкуренты ввели подписку: плати раз в месяц — пей кофе каждый день. Нужно ли срочно менять модель?",
+    answers: [
+      { text: "Да — срочно скопировать модель конкурента, раз она популярна", pts: 15 },
+      { text: "Нет — наша модель работает, незачем что-то менять", pts: 5 },
+      { text: "Протестировать подписку на небольшой группе клиентов сначала", pts: 100 },
+      { text: "Снизить цену на кофе, чтобы конкурировать без подписки", pts: 30 }
+    ],
+    bestIndex: 2,
+    explanation: "Срочно копировать конкурента — ловушка. Правильный путь: сначала небольшой тест (пилот), потом решение.",
+    tip: "Подвох: кажется, что «надо срочно действовать» — но поспешные изменения без проверки часто вредят."
+  },
+  {
+    type: "single",
+    category: "📊 Операционная модель",
+    text: "В компании два отдела делают одно и то же — оба занимаются обучением сотрудников. Они мешают друг другу. Что лучше всего сделать?",
+    answers: [
+      { text: "Закрыть один из отделов и уволить всех его сотрудников", pts: 30 },
+      { text: "Оставить как есть: конкуренция между отделами повышает качество", pts: 10 },
+      { text: "Объединить отделы в один с чёткими задачами и едиными правилами", pts: 100 },
+      { text: "Поставить одного начальника сразу над обоими отделами", pts: 40 }
+    ],
+    bestIndex: 2,
+    explanation: "Дублирование — это трата ресурсов. Объединение убирает конкуренцию и создаёт единый центр компетенций.",
+    tip: "Один сильный отдел всегда эффективнее двух слабых, делающих одно и то же."
+  },
+  {
+    type: "trick",
+    category: "📊 Операционная модель",
+    text: "Продажи выросли на 30%, но расходы выросли на 50%. Руководство радуется росту продаж. Всё ли хорошо в компании?",
+    answers: [
+      { text: "Да — главное, что продажи растут, расходы сами снизятся потом", pts: 5 },
+      { text: "Да — рост расходов при росте продаж это нормально и ожидаемо", pts: 10 },
+      { text: "Нет — расходы растут быстрее доходов, это убыточный рост", pts: 100 },
+      { text: "Нет — надо срочно остановить рост и подождать стабилизации", pts: 25 }
+    ],
+    bestIndex: 2,
+    explanation: "Подвох: цифра «30% роста продаж» выглядит хорошо, но когда расходы растут на 50% — компания теряет деньги на каждой продаже.",
+    tip: "Рост ради роста без контроля затрат — путь к банкротству. Важно смотреть на оба числа вместе."
+  },
+  {
+    type: "multi",
+    category: "📊 Операционная модель",
+    text: "Компания запускает новый продукт. Что нужно сделать ДО запуска, чтобы клиенты не разочаровались? (выберите 2 правильных)",
+    answers: [
+      { text: "Продумать, кто и как будет помогать покупателям после продажи", pts: 100 },
+      { text: "Потратить весь бюджет на рекламу для максимального охвата", pts: 10 },
+      { text: "Протестировать продукт на небольшой группе реальных клиентов", pts: 100 },
+      { text: "Установить максимально высокую цену, чтобы окупить затраты быстро", pts: 10 }
+    ],
+    bestIndexes: [0, 2],
+    explanation: "Запуск без поддержки клиентов и без тестирования — две главные причины провала новых продуктов.",
+    tip: "Правило двух шагов перед запуском: тест на реальных людях + готовая поддержка после продажи."
+  },
+  {
+    type: "single",
+    category: "📊 Операционная модель",
+    text: "Анализ показал: 20% товаров дают 80% прибыли, но ресурсы делятся поровну на все товары. Что разумнее всего сделать?",
+    answers: [
+      { text: "Убрать все убыточные товары прямо сейчас без дополнительного анализа", pts: 25 },
+      { text: "Направить больше ресурсов на прибыльные товары, остальные пересмотреть", pts: 100 },
+      { text: "Ничего не менять — диверсификация важнее концентрации на прибыли", pts: 10 },
+      { text: "Вложить деньги в развитие убыточных товаров для их выравнивания", pts: 20 }
+    ],
+    bestIndex: 1,
+    explanation: "Это принцип Парето: 20% усилий дают 80% результата. Сначала нужно проанализировать убыточные — возможно, некоторые стратегически важны.",
+    tip: "Не всегда «убыточный = лишний». Анализ сначала, решение потом."
+  },
+  {
+    type: "trick",
+    category: "📊 Операционная модель",
+    text: "Директор говорит: «Наша компания ориентирована на клиента — у нас есть отдел клиентского сервиса». Это доказывает клиентоориентированность?",
+    answers: [
+      { text: "Да — наличие отдела это главный признак клиентоориентированности", pts: 5 },
+      { text: "Да — если отдел существует, значит клиенты под защитой", pts: 5 },
+      { text: "Нет — важно как устроены все процессы, а не только один отдел", pts: 100 },
+      { text: "Нет — нужно ещё добавить должность директора по клиентам", pts: 20 }
+    ],
+    bestIndex: 2,
+    explanation: "Подвох: один отдел — не клиентоориентированность. Важно, как устроены ВСЕ процессы: продажи, доставка, производство, возвраты.",
+    tip: "Название отдела на двери не меняет того, что происходит внутри компании."
+  },
+  {
+    type: "multi",
+    category: "📊 Операционная модель",
+    text: "Конкурент снизил цену на 30%. Часть клиентов уходит. Что стоит сделать? (выберите 2 правильных)",
+    answers: [
+      { text: "Срочно снизить цену на 30% чтобы не потерять всех клиентов", pts: 10 },
+      { text: "Найти, где в наших процессах можно сократить затраты без потери качества", pts: 100 },
+      { text: "Объяснить клиентам, какую дополнительную ценность они получают у нас", pts: 100 },
+      { text: "Игнорировать — демпинговые цены конкурента долго не продержатся", pts: 15 }
+    ],
+    bestIndexes: [1, 2],
+    explanation: "Просто снижать цену — гонка ко дну. Нужно одновременно искать резервы снижения затрат И показывать клиентам свою ценность.",
+    tip: "Два оружия против демпинга: снизить свои расходы изнутри + объяснить клиенту, за что он платит."
+  },
+
+  // ── БИЗНЕС-ПРОЦЕССЫ ──
+  {
+    type: "single",
+    category: "⚙️ Бизнес-процессы",
+    text: "Подписание договора занимает 14 дней вместо 3. Клиенты уходят к конкурентам. Каков первый правильный шаг?",
+    answers: [
+      { text: "Нанять юристов, чтобы ускорить работу с документами", pts: 30 },
+      { text: "Разобраться, где именно застревает документ в процессе", pts: 100 },
+      { text: "Требовать от всех согласовывать документы гораздо быстрее", pts: 10 },
+      { text: "Убрать половину людей из цепочки согласования сразу", pts: 40 }
+    ],
+    bestIndex: 1,
+    explanation: "Прежде чем что-то делать — нужно понять, где именно проблема. Иначе изменения вслепую могут навредить.",
+    tip: "Сначала диагноз, потом лечение. Не лечи то, что не нашёл."
+  },
+  {
+    type: "trick",
+    category: "⚙️ Бизнес-процессы",
+    text: "Компания автоматизировала процесс согласования и стало хуже. Сотрудники говорят, что новая система сложнее старой. В чём главная ошибка?",
+    answers: [
+      { text: "Купили слишком дешёвую систему автоматизации — нужна дороже", pts: 10 },
+      { text: "Не обучили сотрудников — нужно провести тренинг", pts: 30 },
+      { text: "Автоматизировали плохой процесс, не исправив его сначала", pts: 100 },
+      { text: "Выбрали неправильных сотрудников для внедрения системы", pts: 15 }
+    ],
+    bestIndex: 2,
+    explanation: "Подвох: кажется, что виновата система или обучение. Но главная ошибка — автоматизировали хаос. Плохой процесс + автоматизация = быстрый плохой процесс.",
+    tip: "Золотое правило: сначала упрости процесс, потом автоматизируй. Никогда не наоборот."
+  },
+  {
+    type: "single",
+    category: "⚙️ Бизнес-процессы",
+    text: "Клиенты получают разные ответы от разных сотрудников. Никто не знает, где искать правильную информацию. Как системно решить?",
+    answers: [
+      { text: "Проводить общее совещание всех отделов каждое утро", pts: 20 },
+      { text: "Создать единую базу знаний, где хранится вся актуальная информация", pts: 100 },
+      { text: "Назначить в каждый отдел сотрудника, ответственного за коммуникацию", pts: 35 },
+      { text: "Запретить устные договорённости и всё переводить в переписку", pts: 15 }
+    ],
+    bestIndex: 1,
+    explanation: "Единая база знаний — это «один источник правды». Все ищут ответы там, а не у коллег, которые могут ошибаться.",
+    tip: "Одна правда лучше десяти мнений. База знаний убирает человеческий фактор из информации."
+  },
+  {
+    type: "trick",
+    category: "⚙️ Бизнес-процессы",
+    text: "Проверка показала: почти половина сотрудников делает работу, не прописанную в их инструкциях. Руководитель хочет немедленно наказать всех нарушителей. Он прав?",
+    answers: [
+      { text: "Да — нарушение инструкций недопустимо, надо наказать", pts: 5 },
+      { text: "Да — дисциплина важнее гибкости в любой ситуации", pts: 5 },
+      { text: "Нет — скорее всего инструкции устарели и требуют обновления", pts: 100 },
+      { text: "Нет — достаточно просто попросить соблюдать инструкции", pts: 20 }
+    ],
+    bestIndex: 2,
+    explanation: "Подвох: выглядит как нарушение, но это сигнал. Если половина людей работает по-другому — инструкции уже не отражают реальность.",
+    tip: "Когда реальность расходится с правилами — нужно обновить правила, а не наказывать за реальность."
+  },
+  {
+    type: "multi",
+    category: "⚙️ Бизнес-процессы",
+    text: "Отдел продаж и склад работают в разных программах, данные не совпадают. Какие два действия решат проблему в корне?",
+    answers: [
+      { text: "Каждое утро склад присылает список остатков в Excel продавцам", pts: 15 },
+      { text: "Связать программы технически, чтобы данные обновлялись автоматически", pts: 100 },
+      { text: "Определить одну систему как главную для остатков товаров", pts: 100 },
+      { text: "Создать отдельного сотрудника-посредника между складом и продажами", pts: 20 }
+    ],
+    bestIndexes: [1, 2],
+    explanation: "Ручная передача данных всегда будет с ошибками и задержками. Автоматическая связь + единый источник данных — системное решение.",
+    tip: "Посредник-человек между системами — это временный пластырь, а не лечение."
+  },
+  {
+    type: "single",
+    category: "⚙️ Бизнес-процессы",
+    text: "Регистрация нового клиента занимает 30 дней, у конкурентов — 7 дней. Что нужно сделать прежде всего?",
+    answers: [
+      { text: "Нанять больше менеджеров по работе с новыми клиентами", pts: 25 },
+      { text: "Пройти весь путь глазами клиента и найти, где теряется время", pts: 100 },
+      { text: "Укоротить договор до одной страницы для ускорения подписания", pts: 30 },
+      { text: "Обслуживать подробно только крупных клиентов, остальных быстро", pts: 15 }
+    ],
+    bestIndex: 1,
+    explanation: "Нужно сначала пройти весь путь и найти, где теряется время. Обычно 40–60% шагов можно убрать или ускорить без потери качества.",
+    tip: "Встань на место клиента и пройди весь путь сам — это покажет проблемы быстрее любого анализа."
+  },
+  {
+    type: "single",
+    category: "⚙️ Бизнес-процессы",
+    text: "Сотрудник тратит 6 часов в день на ручной ввод данных из заявок клиентов. Часто ошибается. Что лучше сделать?",
+    answers: [
+      { text: "Нанять второго сотрудника для той же монотонной работы", pts: 15 },
+      { text: "Настроить программу-робота для автоматического переноса данных", pts: 100 },
+      { text: "Сделать более удобную форму для клиентов, чтобы меньше ошибок", pts: 40 },
+      { text: "Перейти на бумажные заявки и вводить их пакетами раз в день", pts: 5 }
+    ],
+    bestIndex: 1,
+    explanation: "Рутинный ввод данных без исключений — задача для автоматизации. Робот делает это 24/7 без ошибок и усталости.",
+    tip: "Если работу можно описать пошаговой инструкцией — её можно автоматизировать."
+  },
+  {
+    type: "trick",
+    category: "⚙️ Бизнес-процессы",
+    text: "Три отдела спорят, кто отвечает за общий результат. Директор решает: дать всем троим одинаковый KPI. Поможет ли это?",
+    answers: [
+      { text: "Да — единый KPI объединит команды вокруг одной цели", pts: 30 },
+      { text: "Да — когда у всех одна цель, конфликтов не будет", pts: 20 },
+      { text: "Нет — единый KPI не убирает размытую ответственность между тремя", pts: 100 },
+      { text: "Нет — KPI вообще не работают, нужны другие методы", pts: 10 }
+    ],
+    bestIndex: 2,
+    explanation: "Подвох: общий KPI звучит логично, но не решает проблему. Когда все отвечают за одно — никто реально не отвечает. Нужно чётко разграничить роли.",
+    tip: "«Все ответственны» = «никто не ответственен». Нужна персональная ответственность за каждый участок."
+  },
+  {
+    type: "single",
+    category: "⚙️ Бизнес-процессы",
+    text: "В отделе закупок были случаи мошенничества. Как лучше всего защититься от злоупотреблений?",
+    answers: [
+      { text: "Передать все закупки одному самому доверенному руководителю", pts: 20 },
+      { text: "Разделить роли: один заказывает, другой принимает, третий оплачивает", pts: 100 },
+      { text: "Установить камеры видеонаблюдения в отделе закупок", pts: 10 },
+      { text: "Ограничить суммы без разрешения директора до минимума", pts: 35 }
+    ],
+    bestIndex: 1,
+    explanation: "Разделение ролей — классическая защита: один человек не может одновременно заказать, принять и оплатить товар.",
+    tip: "Контроль не в недоверии к людям — а в том, чтобы одному человеку не нужно было быть честным за всех сразу."
+  },
+
+  // ── МОЩНОСТИ ──
+  {
+    type: "trick",
+    category: "🏭 Мощности",
+    text: "Производственная линия загружена на 95%. Заказы начали задерживаться. Руководитель говорит: «Надо срочно купить новое оборудование». Он прав?",
+    answers: [
+      { text: "Да — 95% загрузка это очень много, нужно больше оборудования", pts: 20 },
+      { text: "Да — задержки заказов это прямое доказательство нехватки мощности", pts: 15 },
+      { text: "Нет — сначала стоит проверить, есть ли скрытый резерв внутри", pts: 100 },
+      { text: "Нет — оборудование дорогое, лучше вводить сверхурочные смены", pts: 30 }
+    ],
+    bestIndex: 2,
+    explanation: "Подвох: 95% загрузка звучит как «нет места», но часто оборудование простаивает из-за поломок или ожидания. Реальный резерв может быть 15–30%.",
+    tip: "Перед покупкой нового — проверь, всё ли ты получаешь от старого."
+  },
+  {
+    type: "single",
+    category: "🏭 Мощности",
+    text: "Склад полностью забит, новый товар уже едет. Аренда второго склада стоит дорого. Что разумнее сделать первым?",
+    answers: [
+      { text: "Снять дополнительный склад — выхода другого нет", pts: 35 },
+      { text: "Остановить приём новых партий до освобождения места", pts: 20 },
+      { text: "Разобраться с залежавшимся товаром и организовать хранение по высоте", pts: 100 },
+      { text: "Временно разместить часть товара в офисных помещениях компании", pts: 5 }
+    ],
+    bestIndex: 2,
+    explanation: "Часто 20–30% склада занимает неликвид. Расчистка и оптимизация хранения часто полностью решают проблему без аренды.",
+    tip: "Прежде чем тратить деньги на новое пространство — освободи имеющееся."
+  },
+  {
+    type: "single",
+    category: "🏭 Мощности",
+    text: "Ресторан переполнен в выходные, а в будни столики пустуют. Как сбалансировать нагрузку без открытия нового ресторана?",
+    answers: [
+      { text: "Нанять больше официантов только на выходные дни работы", pts: 40 },
+      { text: "Ввести предзапись столиков и скидки на посещение в будни", pts: 100 },
+      { text: "Ограничить время нахождения гостей за столиком до 1 часа", pts: 15 },
+      { text: "Принимать в будни только крупные корпоративные мероприятия", pts: 20 }
+    ],
+    bestIndex: 1,
+    explanation: "Управление спросом через бронирование и ценообразование намного дешевле, чем наращивание мощности.",
+    tip: "Умнее не расширять мощность, а управлять спросом — перемещать его туда, где есть место."
+  },
+  {
+    type: "multi",
+    category: "🏭 Мощности",
+    text: "Компания срочно нужна дополнительная мощность. Какие два решения можно использовать быстро без капитальных вложений?",
+    answers: [
+      { text: "Срочно построить новый производственный цех для увеличения мощности", pts: 10 },
+      { text: "Отдать часть заказов партнёру-производителю на контрактных условиях", pts: 100 },
+      { text: "Ввести дополнительную рабочую смену на существующем оборудовании", pts: 100 },
+      { text: "Поднять цены, чтобы снизить спрос до уровня текущей мощности", pts: 15 }
+    ],
+    bestIndexes: [1, 2],
+    explanation: "Строительство занимает месяцы и стоит дорого. Вторая смена и контрактный партнёр — быстрые решения без инвестиций.",
+    tip: "В кризис мощности: сначала используй что есть, потом думай о новом."
+  },
+  {
+    type: "trick",
+    category: "🏭 Мощности",
+    text: "Сайт компании упал во время акции. Потеряли продажи. IT-директор предлагает купить сервер в 10 раз мощнее. Это хорошее решение?",
+    answers: [
+      { text: "Да — мощный сервер гарантирует бесперебойную работу в пики", pts: 20 },
+      { text: "Да — это разовая инвестиция, которая окупится быстро", pts: 15 },
+      { text: "Нет — нужен облачный хостинг с автоматическим масштабированием", pts: 100 },
+      { text: "Нет — лучше перенести все акции на ночное время", pts: 10 }
+    ],
+    bestIndex: 2,
+    explanation: "Подвох: мощный сервер простаивает 360 дней в году, а стоит дорого. Облако автоматически увеличивает мощность только в нужный момент.",
+    tip: "Зачем платить за 10× мощность весь год, если она нужна только 5 дней?"
+  },
+  {
+    type: "single",
+    category: "🏭 Мощности",
+    text: "Транспортные расходы составляют 20% выручки при отраслевой норме 8–10%. Что нужно сделать первым?",
+    answers: [
+      { text: "Сменить транспортную компанию на более дешёвую альтернативу", pts: 25 },
+      { text: "Разобраться где именно теряются деньги: маршруты, мелкие отправки, посредники", pts: 100 },
+      { text: "Переложить транспортные расходы на клиентов через доплату", pts: 20 },
+      { text: "Завести собственный автопарк для снижения зависимости от партнёров", pts: 30 }
+    ],
+    bestIndex: 1,
+    explanation: "Смена перевозчика — самое очевидное решение, но часто не помогает. Реальная причина может быть в маршрутах, мелких отправках или лишних посредниках.",
+    tip: "Не лечи симптомы. Сначала найди, где именно уходят деньги — потом режь."
+  },
+  {
+    type: "single",
+    category: "🏭 Мощности",
+    text: "В компании старое оборудование, которое постоянно ломается. Ремонтировать или заменить? Как принять решение?",
+    answers: [
+      { text: "Заменить всё сразу на новое — старое уже не справляется", pts: 20 },
+      { text: "Посчитать совокупную стоимость ремонтов и простоев за год", pts: 100 },
+      { text: "Ремонтировать до полного износа — это самый экономный путь", pts: 15 },
+      { text: "Спросить операторов — они лучше всех знают состояние машин", pts: 25 }
+    ],
+    bestIndex: 1,
+    explanation: "Только цифры дают правильный ответ: если годовые ремонты и простои дороже нового оборудования — нужно менять.",
+    tip: "Решение «чинить или менять» всегда должно основываться на деньгах, а не на ощущениях."
+  },
+
+  // ── ПЕРСОНАЛ ──
+  {
+    type: "single",
+    category: "👥 Персонал",
+    text: "Каждый год уходит почти половина сотрудников, причём большинство — в первые полгода. В чём скорее всего главная причина?",
+    answers: [
+      { text: "Зарплата ниже рынка — людей переманивают конкуренты", pts: 35 },
+      { text: "Плохая адаптация новых сотрудников в первые месяцы работы", pts: 100 },
+      { text: "Нужно подписывать контракт с запретом на уход до года", pts: 5 },
+      { text: "Нанимают неподходящих кандидатов без нужного опыта", pts: 20 }
+    ],
+    bestIndex: 1,
+    explanation: "Если уходят именно в первые 6 месяцев — значит человек не разобрался, не получил поддержки и не «прижился». Это проблема онбординга.",
+    tip: "Первые 90 дней решают всё. Плохое начало почти невозможно исправить потом."
+  },
+  {
+    type: "trick",
+    category: "👥 Персонал",
+    text: "Один сотрудник знает всё о ключевом процессе. Директор доволен: «Он незаменим!» Это хорошо для компании?",
+    answers: [
+      { text: "Да — незаменимые сотрудники это ценный актив компании", pts: 5 },
+      { text: "Да — это значит, что мы наняли лучшего специалиста на рынке", pts: 5 },
+      { text: "Нет — незаменимость одного человека это огромный риск для компании", pts: 100 },
+      { text: "Нет — незаменимые сотрудники всегда требуют слишком высокую зарплату", pts: 20 }
+    ],
+    bestIndex: 2,
+    explanation: "Подвох: «незаменимый» звучит как комплимент. Но для компании это угроза. Уйдёт в отпуск, заболеет, уволится — всё встанет.",
+    tip: "Задача менеджера — сделать так, чтобы его команда работала и без него. Незаменимость — это риск, а не достижение."
+  },
+  {
+    type: "single",
+    category: "👥 Персонал",
+    text: "Производительность отдела упала на 25% за квартал. Явных причин не видно. Каков правильный первый шаг руководителя?",
+    answers: [
+      { text: "Провести аттестацию и уволить отстающих сотрудников отдела", pts: 15 },
+      { text: "Поговорить с каждым сотрудником лично и понять, что мешает", pts: 100 },
+      { text: "Установить систему KPI и штрафы за невыполнение плана", pts: 20 },
+      { text: "Ничего не делать — временный спад сам выровняется через квартал", pts: 5 }
+    ],
+    bestIndex: 1,
+    explanation: "Прежде чем наказывать — нужно понять причину. Часто падение связано с конкретной системной проблемой, а не с ленью.",
+    tip: "Сначала спроси «почему», потом реши «что делать». Наказание без диагноза не лечит."
+  },
+  {
+    type: "multi",
+    category: "👥 Персонал",
+    text: "Опытные специалисты думают об уходе из-за скучной работы. Какие два действия лучше всего удержат их?",
+    answers: [
+      { text: "Поднять зарплату на 30% — деньги решают все вопросы мотивации", pts: 25 },
+      { text: "Дать интересные проекты и возможность учиться новому", pts: 100 },
+      { text: "Подписать контракт с денежным штрафом за досрочный уход", pts: 5 },
+      { text: "Показать конкретный путь карьерного роста внутри компании", pts: 100 }
+    ],
+    bestIndexes: [1, 3],
+    explanation: "Квалифицированных специалистов удерживают интересные задачи и понятное будущее — а не только деньги или контракты.",
+    tip: "Деньги приводят людей. Смысл и развитие — оставляют их."
+  },
+  {
+    type: "trick",
+    category: "👥 Персонал",
+    text: "В отделе из 10 человек реально работают только трое. Семеро имитируют занятость. Достаточно ли уволить семерых?",
+    answers: [
+      { text: "Да — уволить семерых, они не приносят пользы компании", pts: 15 },
+      { text: "Да — это справедливо по отношению к трём работающим", pts: 10 },
+      { text: "Нет — сначала нужно разобраться в причинах и системе задач", pts: 100 },
+      { text: "Нет — просто нужно пригрозить увольнением всем семерым", pts: 10 }
+    ],
+    bestIndex: 2,
+    explanation: "Подвох: виновато выглядят семеро, но часто проблема в системе. Нет чётких задач, нет прозрачных целей, нет контроля — значит виновата организация.",
+    tip: "Прежде чем увольнять людей — спроси: а была ли у них возможность нормально работать?"
+  },
+  {
+    type: "single",
+    category: "👥 Персонал",
+    text: "В компании нет системы оценки сотрудников. Повышают по симпатии. Как выстроить справедливую систему?",
+    answers: [
+      { text: "Проводить ежегодное тестирование знаний всех сотрудников", pts: 20 },
+      { text: "Поставить чёткие цели каждому и собирать отзывы от нескольких людей", pts: 100 },
+      { text: "Оценивать всех только по объёму продаж или выполненных задач", pts: 25 },
+      { text: "Доверять мнению руководителя — он лучше всех знает команду", pts: 15 }
+    ],
+    bestIndex: 1,
+    explanation: "Справедливая оценка строится на конкретных целях и обратной связи от нескольких людей — тогда она не зависит от симпатий одного человека.",
+    tip: "«Я думаю, что он хорошо работает» — это мнение. Цифры и отзывы нескольких людей — это факты."
+  },
+  {
+    type: "single",
+    category: "👥 Персонал",
+    text: "Через 3 месяца после внедрения новой программы её использует только 15% сотрудников. Остальные работают по-старому. В чём проблема?",
+    answers: [
+      { text: "Программа слишком сложная — нужно купить другую, попроще", pts: 20 },
+      { text: "Люди не понимают, зачем им новая система лично, и как она помогает", pts: 100 },
+      { text: "Нужно издать приказ об обязательном использовании новой программы", pts: 20 },
+      { text: "Штрафовать тех, кто продолжает работать по-старому", pts: 15 }
+    ],
+    bestIndex: 1,
+    explanation: "Люди принимают изменения, когда видят личную выгоду. Если не объяснить «что это даёт мне» — инструмент не приживётся даже под давлением.",
+    tip: "Любое изменение внедряется через ответ на вопрос: «А мне-то зачем это нужно?»"
+  },
+  {
+    type: "trick",
+    category: "👥 Персонал",
+    text: "Руководитель весь день занят мелкими вопросами от подчинённых. Он думает: «Это моя работа — быть всегда доступным». Прав ли он?",
+    answers: [
+      { text: "Да — доступный руководитель это признак хорошего лидерства", pts: 10 },
+      { text: "Да — если он не доступен, сотрудники будут беспомощны", pts: 10 },
+      { text: "Нет — хороший лидер учит команду решать вопросы самостоятельно", pts: 100 },
+      { text: "Нет — нужно просто нанять помощника для мелких вопросов", pts: 25 }
+    ],
+    bestIndex: 2,
+    explanation: "Подвох: «всегда доступный» звучит как достоинство. Но если без руководителя ничего не решается — он создал зависимость, а не команду.",
+    tip: "Задача лидера — сделать так, чтобы команда работала без него. Вечная доступность — это сигнал о слабой команде."
+  },
+
+  // ── КАЧЕСТВО СЕРВИСА ──
+  {
+    type: "single",
+    category: "⭐ Качество сервиса",
+    text: "Оценка удовлетворённости клиентов резко упала. Недовольные жалуются на долгое решение проблем. Что делать в первую очередь?",
+    answers: [
+      { text: "Провести опрос клиентов о том, что именно им не нравится", pts: 30 },
+      { text: "Лично связаться с недовольными клиентами и устранить причины системно", pts: 100 },
+      { text: "Попросить довольных клиентов снова оставить хорошие оценки", pts: 5 },
+      { text: "Изменить метод подсчёта оценок для более высокого результата", pts: 5 }
+    ],
+    bestIndex: 1,
+    explanation: "Опрос без действий ничего не меняет. Нужно реально звонить недовольным, решать их проблему и убирать причину системно.",
+    tip: "Данные без действий — это просто цифры. Важно замкнуть петлю: узнал → решил → исправил систему."
+  },
+  {
+    type: "trick",
+    category: "⭐ Качество сервиса",
+    text: "Количество жалоб за квартал выросло на 60%. Директор говорит: «Нужно снизить этот показатель». Команда предлагает усложнить форму подачи жалобы. Хорошая идея?",
+    answers: [
+      { text: "Да — меньше форм значит меньше жалоб и лучшая статистика", pts: 0 },
+      { text: "Да — не все жалобы реально обоснованы, часть можно отфильтровать", pts: 5 },
+      { text: "Нет — это скроет проблему, но не решит её, клиенты просто уйдут", pts: 100 },
+      { text: "Нет — нужно нанять больше людей для обработки жалоб", pts: 20 }
+    ],
+    bestIndex: 2,
+    explanation: "Подвох: логика «меньше жалоб = лучше» ведёт к манипуляции статистикой. Клиенты не исчезнут — они просто уйдут молча.",
+    tip: "Жалоба — это подарок. Клиент, который жалуется, ещё хочет остаться. Молчащий просто уходит."
+  },
+  {
+    type: "single",
+    category: "⭐ Качество сервиса",
+    text: "Клиенты звонят по несколько раз с одним вопросом — с первого раза проблему не решают. Как исправить системно?",
+    answers: [
+      { text: "Нанять более опытных и знающих операторов в контакт-центр", pts: 25 },
+      { text: "Создать базу ответов и дать операторам всю историю обращений клиента", pts: 100 },
+      { text: "Ограничить количество повторных звонков от одного и того же клиента", pts: 5 },
+      { text: "Увеличить допустимое время на каждый звонок оператора", pts: 20 }
+    ],
+    bestIndex: 1,
+    explanation: "Если оператор видит всю историю и имеет под рукой готовые ответы — он решает проблему с первого раза, а не перекидывает клиента.",
+    tip: "Клиент не хочет объяснять проблему заново на каждом звонке. История + база знаний убирают эту боль."
+  },
+  {
+    type: "trick",
+    category: "⭐ Качество сервиса",
+    text: "Клиент написал гневный отзыв в соцсетях о бракованном товаре. Пост набирает репосты. PR-менеджер предлагает удалить пост. Это правильно?",
+    answers: [
+      { text: "Да — удалить быстро, пока мало людей увидели проблему", pts: 0 },
+      { text: "Да — соцсети компании должны содержать только позитив", pts: 0 },
+      { text: "Нет — нужно публично извиниться и лично решить проблему клиента", pts: 100 },
+      { text: "Нет — нужно попросить лояльных клиентов написать позитивные комментарии", pts: 20 }
+    ],
+    bestIndex: 2,
+    explanation: "Подвох: удаление выглядит как быстрое решение. Но в интернете удалённое становится ещё более вирусным. Честная реакция всегда лучше скрытия.",
+    tip: "В интернете нет кнопки «удалить и забыть». Честная реакция превращает кризис в демонстрацию зрелости компании."
+  },
+  {
+    type: "single",
+    category: "⭐ Качество сервиса",
+    text: "В сети магазинов в одном сервис отличный, в другом — плохой. Клиенты замечают разницу. Как выровнять качество?",
+    answers: [
+      { text: "Назначить лучший магазин образцовым и возить туда смотреть остальных", pts: 30 },
+      { text: "Написать конкретные стандарты сервиса и регулярно проверять все точки", pts: 100 },
+      { text: "Провести один большой тренинг для всех сотрудников сети", pts: 25 },
+      { text: "Объединить все магазины под одним управляющим для контроля", pts: 20 }
+    ],
+    bestIndex: 1,
+    explanation: "Один тренинг быстро забывается. Стандарты + регулярная проверка — единственный путь к стабильному качеству в нескольких точках.",
+    tip: "Качество без контроля деградирует. Проверяй регулярно — не только когда что-то пошло не так."
+  },
+  {
+    type: "multi",
+    category: "⭐ Качество сервиса",
+    text: "Компания хочет обеспечить поддержку клиентов 24/7 без значительного роста штата. Какие два решения помогут?",
+    answers: [
+      { text: "Нанять отдельную ночную смену операторов для обработки запросов", pts: 30 },
+      { text: "Настроить чат-бот для ответов на типовые вопросы в нерабочее время", pts: 100 },
+      { text: "Создать раздел «Частые вопросы» и обучить клиентов им пользоваться", pts: 100 },
+      { text: "Попросить клиентов обращаться только в рабочее время", pts: 5 }
+    ],
+    bestIndexes: [1, 2],
+    explanation: "Чат-бот закрывает типовые запросы ночью, а база FAQ снижает нагрузку в любое время — вместе они дают 24/7 без найма новых людей.",
+    tip: "Самообслуживание + автоматизация = поддержка без пропорционального роста команды."
+  },
+  {
+    type: "trick",
+    category: "⭐ Качество сервиса",
+    text: "Продавцы обещают клиентам быструю доставку за 2 дня, но реально доставляют за 5–7. Директор предлагает обучить продавцов «не давать обещаний». Поможет ли это?",
+    answers: [
+      { text: "Да — если продавцы не обещают, клиенты не будут разочарованы", pts: 15 },
+      { text: "Да — продавцы несут ответственность за свои слова клиентам", pts: 10 },
+      { text: "Нет — нужно либо ускорить доставку, либо честно говорить 5–7 дней", pts: 100 },
+      { text: "Нет — нужно штрафовать продавцов за каждое нарушенное обещание", pts: 20 }
+    ],
+    bestIndex: 2,
+    explanation: "Подвох: кажется, что проблема в продавцах. Но реальная проблема — несоответствие между обещанием и возможностями. Нужно или исправить процесс, или честно говорить правду.",
+    tip: "Лучше честное «7 дней» и доставить за 6, чем обещать 2 дня и привезти за 7."
+  },
+  {
+    type: "single",
+    category: "⭐ Качество сервиса",
+    text: "Большинство недовольных клиентов ничего не говорят — просто уходят молча. Как узнать о скрытом недовольстве?",
+    answers: [
+      { text: "Упростить форму подачи жалобы на сайте компании", pts: 35 },
+      { text: "Самим спрашивать клиентов о впечатлениях после каждого контакта", pts: 100 },
+      { text: "Мониторить упоминания компании в социальных сетях и отзовиках", pts: 30 },
+      { text: "Нанять тайного покупателя для проверки качества обслуживания", pts: 25 }
+    ],
+    bestIndex: 1,
+    explanation: "Проактивный опрос после каждого контакта — самый точный способ. Клиент не пойдёт жаловаться сам, но ответит если его спросят.",
+    tip: "96% недовольных молчат. Хочешь знать правду — спроси первым."
+  },
+
+  // ── ДОПОЛНИТЕЛЬНЫЕ ──
+  {
+    type: "single",
+    category: "📊 Операционная модель",
+    text: "Компания три квартала подряд тратит больше, чем зарабатывает. Расходы выше доходов на 15%. Что делать первым?",
+    answers: [
+      { text: "Привлечь инвестора для покрытия кассового разрыва компании", pts: 20 },
+      { text: "Разобрать все расходы и оставить только критически необходимые", pts: 100 },
+      { text: "Срочно уволить 30% сотрудников для сокращения расходов", pts: 25 },
+      { text: "Взять кредит и переждать — рынок скоро восстановится", pts: 10 }
+    ],
+    bestIndex: 1,
+    explanation: "В кризис нужно чётко видеть, куда уходят деньги. Ноль-бюджетирование — когда каждый расход нужно обосновать заново.",
+    tip: "В кризис сначала остановить кровотечение. Каждый рубль расхода должен иметь обоснование."
+  },
+  {
+    type: "trick",
+    category: "⚙️ Бизнес-процессы",
+    text: "Стартап быстро растёт. Всё больше хаоса, ошибок и выгорания. Директор говорит: «Нужно просто нанять больше людей». Прав ли он?",
+    answers: [
+      { text: "Да — больше людей справятся с большим объёмом задач", pts: 15 },
+      { text: "Да — при быстром росте всегда нужно расширять команду", pts: 10 },
+      { text: "Нет — новые люди попадут в тот же хаос и не помогут", pts: 100 },
+      { text: "Нет — нужно временно замедлить рост до стабилизации", pts: 30 }
+    ],
+    bestIndex: 2,
+    explanation: "Подвох: больше людей в хаосе = больше хаоса. Сначала нужно зафиксировать основные процессы, потом масштабировать команду.",
+    tip: "Нельзя масштабировать то, чего нет. Сначала порядок, потом рост."
+  },
+  {
+    type: "multi",
+    category: "👥 Персонал",
+    text: "Удалённая команда перестала нормально общаться, проекты задерживаются. Что поможет решить проблему? (выберите 2)",
+    answers: [
+      { text: "Обязать всех сотрудников немедленно вернуться в офис на постоянной основе", pts: 15 },
+      { text: "Ввести структуру регулярных встреч: ежедневный стендап и еженедельная сессия", pts: 100 },
+      { text: "Платить отдельный бонус за активность в командных чатах и звонках", pts: 10 },
+      { text: "Организовать живую встречу команды раз в квартал для командного духа", pts: 100 }
+    ],
+    bestIndexes: [1, 3],
+    explanation: "Ритм регулярных встреч выстраивает коммуникацию, а живые встречи раз в квартал укрепляют отношения — вместе это фундамент удалённой работы.",
+    tip: "Удалённая команда без ритма — это не команда, а группа людей с одним работодателем."
+  },
+  {
+    type: "trick",
+    category: "🏭 Мощности",
+    text: "В сезон праздников заказов стало в три раза больше. Команда работает сверхурочно, но заказы всё равно задерживаются. Директор говорит: «Надо ввести ещё сверхурочные». Это поможет?",
+    answers: [
+      { text: "Да — сверхурочные увеличат выпуск и помогут закрыть отставание", pts: 20 },
+      { text: "Да — в пиковый сезон сверхурочные это нормальная практика", pts: 25 },
+      { text: "Нет — уставшие люди делают больше ошибок, проблема не решится", pts: 100 },
+      { text: "Нет — нужно просто отказаться от лишних заказов в сезон", pts: 20 }
+    ],
+    bestIndex: 2,
+    explanation: "Подвох: сверхурочные кажутся очевидным решением. Но уставшие сотрудники работают медленнее и с ошибками — часто производительность даже падает.",
+    tip: "Сезонность нужно готовить заблаговременно: временный персонал, партнёры, складские запасы — за 2–3 месяца до пика."
+  },
+  {
+    type: "single",
+    category: "⭐ Качество сервиса",
+    text: "После слияния двух компаний клиенты получают разный уровень сервиса. Как правильно объединить стандарты?",
+    answers: [
+      { text: "Принять стандарты более крупной компании как единый эталон", pts: 30 },
+      { text: "Дать каждой компании сохранить свои стандарты без изменений", pts: 15 },
+      { text: "Взять лучшие практики обеих компаний и создать новый единый стандарт", pts: 100 },
+      { text: "Разделить клиентские базы и обслуживать каждую по-своему", pts: 20 }
+    ],
+    bestIndex: 2,
+    explanation: "Лучшие практики двух компаний вместе дают более сильный результат, чем просто взять одну за основу и забыть об опыте другой.",
+    tip: "При слиянии побеждает не большой, а лучший. Используй хорошее от обоих."
+  },
+  {
+    type: "single",
+    category: "📊 Операционная модель",
+    text: "Компания хочет выйти на рынок нового региона. Всё заточено под один регион. Каков правильный первый шаг?",
+    answers: [
+      { text: "Скопировать всю модель один в один в новый регион без изменений", pts: 20 },
+      { text: "Изучить особенности нового региона и запустить небольшой пилот", pts: 100 },
+      { text: "Нанять местного директора и дать ему полную свободу действий", pts: 30 },
+      { text: "Купить местную компанию и работать отдельно без интеграции", pts: 25 }
+    ],
+    bestIndex: 1,
+    explanation: "Каждый рынок имеет свою специфику. Пилот с адаптацией — наименее рискованный путь в новый регион.",
+    tip: "То, что работает здесь, не всегда работает там. Проверь на малом, прежде чем вкладывать всё."
+  },
+  {
+    type: "trick",
+    category: "👥 Персонал",
+    text: "Компания провела дорогие тренинги для сотрудников. Через месяц ничего не изменилось. HR говорит: «Нужно провести ещё тренинги». Это поможет?",
+    answers: [
+      { text: "Да — одного раза мало, нужно повторять для закрепления знаний", pts: 25 },
+      { text: "Да — знания накапливаются постепенно, результат придёт со временем", pts: 20 },
+      { text: "Нет — проблема не в тренингах, а в том, что знания не применяются на работе", pts: 100 },
+      { text: "Нет — нужно поменять тренера на более харизматичного и опытного", pts: 15 }
+    ],
+    bestIndex: 2,
+    explanation: "Подвох: кажется, что «мало тренингов». Но без практических заданий и контроля применения — любое обучение испаряется за неделю.",
+    tip: "Тренинг без практики — это чтение меню вместо ужина. Знать ≠ уметь ≠ делать."
+  },
+  {
+    type: "single",
+    category: "⚙️ Бизнес-процессы",
+    text: "Разработка нового продукта занимает 18 месяцев. К выходу он уже устарел. Как ускорить без потери качества?",
+    answers: [
+      { text: "Нанять больше разработчиков для параллельной работы над продуктом", pts: 20 },
+      { text: "Выпустить простую версию быстро, собрать отзывы и улучшать постепенно", pts: 100 },
+      { text: "Отдать всю разработку на аутсорс в более дешёвую страну", pts: 25 },
+      { text: "Сократить список функций до абсолютного минимума навсегда", pts: 35 }
+    ],
+    bestIndex: 1,
+    explanation: "Быстрый выпуск простой версии с последующим улучшением по обратной связи — это agile-подход. Он сокращает time-to-market в 3–5 раз.",
+    tip: "Лучше выпустить хорошее сейчас, чем идеальное через два года когда рынок изменится."
+  },
+  {
+    type: "multi",
+    category: "⭐ Качество сервиса",
+    text: "Крупный клиент провёл аудит и нашёл 15 нарушений. Угрожает уйти. Что нужно сделать? (выберите 2)",
+    answers: [
+      { text: "Оспорить результаты аудита и доказать их некорректность", pts: 5 },
+      { text: "Признать нарушения и составить план их исправления со сроками", pts: 100 },
+      { text: "Предложить скидку 20% как компенсацию за выявленные нарушения", pts: 30 },
+      { text: "Регулярно отчитываться клиенту о прогрессе исправлений по плану", pts: 100 }
+    ],
+    bestIndexes: [1, 3],
+    explanation: "Признание + план + регулярная отчётность — единственный путь восстановить доверие после аудита. Скидка без исправлений ничего не решит.",
+    tip: "Клиент хочет не скидку, а уверенность что проблема решена. Покажи это делами."
+  },
+  {
+    type: "single",
+    category: "🏭 Мощности",
+    text: "Компания платит за 5000 кв.м. офиса, но реально используют только 3000. Что разумнее всего сделать?",
+    answers: [
+      { text: "Срочно съехать в меньший офис и сэкономить на аренде", pts: 40 },
+      { text: "Расширить штат до заполнения всей оплачиваемой площади офиса", pts: 10 },
+      { text: "Ввести гибкий график и свободные рабочие места, лишнее сдать в субаренду", pts: 100 },
+      { text: "Оставить пустые площади на случай роста компании в будущем", pts: 20 }
+    ],
+    bestIndex: 2,
+    explanation: "Гибкий график + субаренда превращают пустые площади из статьи затрат в источник дохода, без переезда и потери гибкости.",
+    tip: "Пустое пространство — это замороженные деньги. Либо заполни, либо монетизируй."
+  },
+  {
+    type: "trick",
+    category: "📊 Операционная модель",
+    text: "ESG (экологические и социальные стандарты) — это просто мода или реальная необходимость для бизнеса сегодня?",
+    answers: [
+      { text: "Мода — крупные компании публикуют отчёты для имиджа, не более", pts: 10 },
+      { text: "Мода — малому и среднему бизнесу это вообще не нужно", pts: 5 },
+      { text: "Необходимость — крупные партнёры и инвесторы всё чаще это требуют", pts: 100 },
+      { text: "Необходимость — за нарушение ESG штрафуют все регуляторы мира", pts: 20 }
+    ],
+    bestIndex: 2,
+    explanation: "Подвох: ESG выглядит как «опциональный имидж». Но всё больше крупных заказчиков и банков требуют ESG-соответствие как условие сотрудничества.",
+    tip: "Не важно, верите ли вы в ESG. Если ваши партнёры его требуют — это операционная необходимость."
+  }
+];
+
+// ══════════════════════════════════════════════════════════
+//  GAME STATE
+// ══════════════════════════════════════════════════════════
+const TOTAL_QUESTIONS = 30;
+const LEVELS = [
+  { q: 5,  pts: 500,  label: "Уверенный старт" },
+  { q: 10, pts: 1000, label: "Операционист" },
+  { q: 15, pts: 1500, label: "Процессник" },
+  { q: 20, pts: 2000, label: "Менеджер" },
+  { q: 25, pts: 2500, label: "Эксперт" },
+  { q: 30, pts: 3000, label: "Операционный гуру" }
+];
+
+let state = {
+  questions: [],
+  current: 0,
+  score: 0,
+  correct: 0,
+  wrong: 0,
+  partial: 0,
+  answered: false,
+  revealed: false,
+  // for multi: which indices selected
+  multiSelected: [],
+  // display index → orig index map for current question
+  displayIndices: []
+};
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startGame() {
+  state.questions = shuffle(QUESTIONS).slice(0, TOTAL_QUESTIONS);
+  state.current = 0;
+  state.score = 0;
+  state.correct = 0;
+  state.wrong = 0;
+  state.partial = 0;
+  state.answered = false;
+  state.revealed = false;
+  showScreen('gameScreen');
+  renderLevels();
+  renderQuestion();
+}
+
+function showStart() { showScreen('startScreen'); }
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function renderLevels() {
+  const container = document.getElementById('levelsDisplay');
+  container.innerHTML = LEVELS.map(l => {
+    const done = state.current > l.q;
+    const current = state.current <= l.q && state.current > (l.q - 5);
+    return `<div class="level-row ${done ? 'done' : ''} ${current ? 'current' : ''}">
+      <span>${done ? '✓' : current ? '▶' : '○'} ${l.label}</span>
+      <span class="pts">${l.pts}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderQuestion() {
+  const q = state.questions[state.current];
+  state.answered = false;
+  state.revealed = false;
+  state.multiSelected = [];
+
+  const pct = (state.current / TOTAL_QUESTIONS) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `Вопрос ${state.current + 1} из ${TOTAL_QUESTIONS}`;
+  document.getElementById('qCounter').textContent = `#${state.current + 1}`;
+  document.getElementById('scoreBadge').textContent = `⭐ ${state.score} баллов`;
+
+  document.getElementById('qCategory').textContent = q.category;
+  document.getElementById('qText').textContent = q.text;
+
+  // type badge
+  const badge = document.getElementById('qTypeBadge');
+  if (q.type === 'trick') {
+    badge.style.display = 'inline-flex';
+    badge.className = 'q-type-badge trick';
+    badge.textContent = '⚠️ Вопрос с подвохом';
+  } else if (q.type === 'multi') {
+    badge.style.display = 'inline-flex';
+    badge.className = 'q-type-badge multi';
+    badge.textContent = '✌️ Два правильных ответа';
+  } else {
+    badge.style.display = 'none';
+  }
+
+  // multi hint
+  const hint = document.getElementById('multiHint');
+  hint.className = q.type === 'multi' ? 'multi-hint show' : 'multi-hint';
+
+  // shuffle answer order
+  const indices = shuffle([0, 1, 2, 3]);
+  state.displayIndices = indices;
+  const letters = ['А', 'Б', 'В', 'Г'];
+  const grid = document.getElementById('answersGrid');
+  grid.innerHTML = '';
+
+  indices.forEach((origIdx, displayIdx) => {
+    const btn = document.createElement('button');
+    btn.className = 'answer-btn';
+    btn.dataset.origIdx = origIdx;
+    btn.dataset.displayIdx = displayIdx;
+    btn.innerHTML = `<span class="letter">${letters[displayIdx]}</span>${q.answers[origIdx].text}`;
+    if (q.type === 'multi') {
+      btn.onclick = () => toggleMulti(btn, origIdx);
+    } else {
+      btn.onclick = () => selectSingle(origIdx, btn);
+    }
+    grid.appendChild(btn);
+  });
+
+  document.getElementById('answerFeedback').className = 'answer-feedback';
+  document.getElementById('answerFeedback').innerHTML = '';
+
+  // footer buttons
+  document.getElementById('btnReveal').className = 'btn-reveal';
+  document.getElementById('btnNext').className = 'btn-next';
+  if (q.type === 'multi') {
+    document.getElementById('btnConfirm').className = 'btn-confirm show';
+    document.getElementById('btnConfirm').disabled = true;
+  } else {
+    document.getElementById('btnConfirm').className = 'btn-confirm';
+  }
+
+  document.getElementById('questionCard').classList.remove('animate-in');
+  void document.getElementById('questionCard').offsetWidth;
+  document.getElementById('questionCard').classList.add('animate-in');
+
+  renderLevels();
+}
+
+// ── SINGLE / TRICK answer ──
+function selectSingle(origIdx, clickedBtn) {
+  if (state.answered) return;
+  state.answered = true;
+
+  // mark selected — no green/red yet
+  document.querySelectorAll('.answer-btn').forEach(b => b.classList.remove('selected'));
+  clickedBtn.classList.add('selected');
+  document.querySelectorAll('.answer-btn').forEach(b => b.disabled = true);
+
+  // show Reveal button
+  document.getElementById('btnReveal').className = 'btn-reveal show';
+}
+
+// ── MULTI select ──
+function toggleMulti(btn, origIdx) {
+  if (state.answered) return;
+  const idx = state.multiSelected.indexOf(origIdx);
+  if (idx === -1) {
+    if (state.multiSelected.length >= 2) return; // max 2
+    state.multiSelected.push(origIdx);
+    btn.classList.add('selected');
+    btn.querySelector('.letter').style.background = 'var(--accent)';
+    btn.querySelector('.letter').style.color = '#fff';
+  } else {
+    state.multiSelected.splice(idx, 1);
+    btn.classList.remove('selected');
+    btn.querySelector('.letter').style.background = '';
+    btn.querySelector('.letter').style.color = '';
+  }
+  document.getElementById('btnConfirm').disabled = state.multiSelected.length !== 2;
+}
+
+function confirmMulti() {
+  if (state.multiSelected.length !== 2) return;
+  state.answered = true;
+  document.querySelectorAll('.answer-btn').forEach(b => b.disabled = true);
+  document.getElementById('btnConfirm').className = 'btn-confirm'; // hide
+  document.getElementById('btnReveal').className = 'btn-reveal show';
+}
+
+// ── REVEAL ──
+function revealAnswer() {
+  if (state.revealed) return;
+  state.revealed = true;
+
+  const q = state.questions[state.current];
+  document.getElementById('btnReveal').className = 'btn-reveal'; // hide
+
+  const allBtns = Array.from(document.querySelectorAll('.answer-btn'));
+
+  if (q.type === 'multi') {
+    revealMulti(q, allBtns);
+  } else {
+    revealSingle(q, allBtns);
+  }
+
+  document.getElementById('btnNext').className = 'btn-next show';
+  document.getElementById('scoreBadge').classList.add('pulse');
+  setTimeout(() => document.getElementById('scoreBadge').classList.remove('pulse'), 500);
+}
+
+function revealSingle(q, allBtns) {
+  // find which button was selected
+  const selectedBtn = allBtns.find(b => b.classList.contains('selected'));
+  const selectedOrigIdx = selectedBtn ? parseInt(selectedBtn.dataset.origIdx) : -1;
+  const pts = q.answers[selectedOrigIdx]?.pts || 0;
+  const isOptimal = selectedOrigIdx === q.bestIndex;
+
+  state.score += pts;
+  document.getElementById('scoreBadge').textContent = `⭐ ${state.score} баллов`;
+
+  if (isOptimal) {
+    state.correct++;
+    selectedBtn.classList.remove('selected');
+    selectedBtn.classList.add('reveal-correct');
+    selectedBtn.querySelector('.letter').style.background = 'var(--green)';
+    selectedBtn.querySelector('.letter').style.color = '#fff';
+  } else {
+    state.wrong++;
+    selectedBtn.classList.remove('selected');
+    selectedBtn.classList.add('reveal-wrong');
+    selectedBtn.querySelector('.letter').style.background = 'var(--red)';
+    selectedBtn.querySelector('.letter').style.color = '#fff';
+    // highlight correct
+    allBtns.forEach(b => {
+      if (parseInt(b.dataset.origIdx) === q.bestIndex) {
+        b.classList.add('reveal-correct');
+        b.querySelector('.letter').style.background = 'var(--green)';
+        b.querySelector('.letter').style.color = '#fff';
+      }
+    });
+  }
+
+  // dim others
+  allBtns.forEach(b => {
+    if (!b.classList.contains('reveal-correct') && !b.classList.contains('reveal-wrong')) {
+      b.classList.add('reveal-neutral');
+    }
+  });
+
+  // build feedback
+  const wrongText = isOptimal ? null : q.answers[selectedOrigIdx]?.text;
+  showFeedback(q, pts, isOptimal ? 'ok' : 'bad', wrongText ? [wrongText] : []);
+}
+
+function revealMulti(q, allBtns) {
+  const selected = state.multiSelected;
+  const correct = q.bestIndexes;
+
+  const correctSelected = selected.filter(i => correct.includes(i));
+  const wrongSelected = selected.filter(i => !correct.includes(i));
+
+  // score
+  let pts = 0;
+  if (correctSelected.length === 2 && wrongSelected.length === 0) {
+    pts = 100;
+    state.correct++;
+  } else if (correctSelected.length === 1) {
+    pts = 40;
+    state.partial++;
+  } else {
+    pts = 10;
+    state.wrong++;
+  }
+
+  state.score += pts;
+  document.getElementById('scoreBadge').textContent = `⭐ ${state.score} баллов`;
+
+  allBtns.forEach(b => {
+    const origIdx = parseInt(b.dataset.origIdx);
+    b.classList.remove('selected');
+    b.querySelector('.letter').style.background = '';
+    b.querySelector('.letter').style.color = '';
+
+    if (correct.includes(origIdx)) {
+      b.classList.add('reveal-correct');
+      b.querySelector('.letter').style.background = 'var(--green)';
+      b.querySelector('.letter').style.color = '#fff';
+    } else if (selected.includes(origIdx)) {
+      b.classList.add('reveal-wrong');
+      b.querySelector('.letter').style.background = 'var(--red)';
+      b.querySelector('.letter').style.color = '#fff';
+    } else {
+      b.classList.add('reveal-neutral');
+    }
+  });
+
+  const resultType = pts === 100 ? 'ok' : pts === 40 ? 'partial' : 'bad';
+  const wrongTexts = wrongSelected.map(i => q.answers[i].text);
+  showFeedback(q, pts, resultType, wrongTexts);
+}
+
+function showFeedback(q, pts, resultType, wrongTexts) {
+  const fb = document.getElementById('answerFeedback');
+
+  const resultLabel = {
+    ok: '✅ Правильно!',
+    partial: '🟡 Частично верно',
+    bad: '❌ Не верно'
+  }[resultType];
+
+  const wrongBlock = wrongTexts.length > 0
+    ? `<div class="fb-wrong-list">${wrongTexts.map(t =>
+        `<div class="fb-wrong-item">${t}</div>`).join('')}</div>`
+    : '';
+
+  fb.innerHTML = `<div class="fb-row">
+    <div class="fb-result ${resultType}">${resultLabel} <span class="points-badge">+${pts} баллов</span></div>
+    <div class="fb-explanation">${q.explanation}</div>
+    ${wrongBlock}
+    <div class="fb-tip"><span class="fb-tip-icon">💡</span><span>${q.tip}</span></div>
+  </div>`;
+  fb.classList.add('show');
+}
+
+function nextQuestion() {
+  state.current++;
+  if (state.current >= TOTAL_QUESTIONS) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResults() {
+  showScreen('resultScreen');
+  const maxScore = TOTAL_QUESTIONS * 100;
+  const pct = Math.round((state.score / maxScore) * 100);
+  const accuracy = Math.round((state.correct / TOTAL_QUESTIONS) * 100);
+
+  document.getElementById('finalScore').textContent = state.score;
+  document.getElementById('statCorrect').textContent = state.correct;
+  document.getElementById('statWrong').textContent = state.wrong;
+  document.getElementById('statAccuracy').textContent = accuracy + '%';
+
+  let icon, title, sub, grade, gradeDesc, tip;
+
+  if (pct >= 85) {
+    icon = '🏆'; title = 'Операционный Гуру!'; sub = 'Вы мастерски справились с вызовами!';
+    grade = 'Уровень: Эксперт-практик';
+    gradeDesc = 'Ваши знания операционного менеджмента на уровне топ-менеджера. Вы умеете находить скрытые ловушки и выбирать оптимальные решения.';
+    tip = 'Ваш следующий шаг — практика. Возьмите реальный бизнес-кейс и попробуйте применить полученные знания. Теория + практика = настоящая экспертиза.';
+  } else if (pct >= 65) {
+    icon = '🎯'; title = 'Отличный результат!'; sub = 'Вы показали глубокие знания';
+    grade = 'Уровень: Старший менеджер';
+    gradeDesc = 'Хорошее понимание операционных принципов. Пара зон для роста: вопросы с подвохом и многовариантные задачи.';
+    tip = 'Уделите внимание ловушкам «очевидных» решений. Часто правильный ответ — не самый очевидный. Задавайте себе вопрос: «А точно ли я правильно понял задачу?»';
+  } else if (pct >= 45) {
+    icon = '📈'; title = 'Хороший старт!'; sub = 'Есть куда расти — это нормально';
+    grade = 'Уровень: Менеджер';
+    gradeDesc = 'Базовые концепции понятны, но оптимальные решения пока не всегда очевидны. Это нормально для 1–2 курса.';
+    tip = 'Главный навык операционного менеджера — сначала понять причину проблемы, только потом действовать. Тренируй вопрос «Почему это происходит?» до того как спрашивать «Что делать?»';
+  } else {
+    icon = '🌱'; title = 'Начало пути!'; sub = 'Каждый эксперт когда-то начинал';
+    grade = 'Уровень: Начинающий';
+    gradeDesc = 'Операционный менеджмент — это навык, который приходит с практикой и изучением. Первый шаг уже сделан!';
+    tip = 'Запомни одно главное правило: в бизнесе «очевидное решение» почти никогда не является лучшим. Всегда спрашивай «Почему?» минимум три раза, прежде чем предлагать решение.';
+  }
+
+  document.getElementById('resultIcon').textContent = icon;
+  document.getElementById('resultTitle').textContent = title;
+  document.getElementById('resultSubtitle').textContent = sub;
+  document.getElementById('gradeTitle').textContent = grade;
+  document.getElementById('gradeDesc').textContent = gradeDesc;
+  document.getElementById('resultTipText').textContent = tip;
+}
+</script>
+</body>
+</html>
