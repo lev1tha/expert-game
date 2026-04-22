@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Кто хочет стать экспертом? | Операционный менеджмент</title>
+<title>Кто Эксперт? | ЭБиМ</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -333,6 +333,54 @@
     50% { transform: scale(1.04); }
   }
   .pulse { animation: pulse 0.5s ease; }
+  /* ── CATEGORY SCREEN ── */
+  .abbr-badge {
+    display: inline-block;
+    background: var(--accent); color: #fff;
+    border-radius: 10px; padding: 0.2rem 0.7rem;
+    font-size: 0.8rem; font-weight: 800;
+    letter-spacing: 0.08em; margin-bottom: 0.75rem;
+  }
+  .cat-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 0.75rem; margin: 1.25rem 0 1.5rem;
+  }
+  .cat-card {
+    background: var(--card2); border: 2px solid var(--border);
+    border-radius: 16px; padding: 1rem 1rem 0.875rem;
+    cursor: pointer; transition: all 0.18s;
+    text-align: left; display: flex; align-items: flex-start; gap: 0.6rem;
+    font-family: 'Nunito', sans-serif;
+  }
+  .cat-card:hover { border-color: var(--accent2); background: var(--accent-light); transform: translateY(-2px); box-shadow: var(--shadow); }
+  .cat-card.selected { border-color: var(--accent); background: var(--accent-light); }
+  .cat-card.selected .cat-check { background: var(--accent); color: #fff; }
+  .cat-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 2px; }
+  .cat-info { flex: 1; }
+  .cat-name { font-size: 0.9rem; font-weight: 700; color: var(--text); line-height: 1.3; }
+  .cat-count { font-size: 0.75rem; color: var(--text2); margin-top: 0.15rem; }
+  .cat-check {
+    min-width: 22px; height: 22px; border-radius: 6px;
+    background: var(--bg); border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; font-weight: 800; flex-shrink: 0;
+    transition: all 0.15s;
+  }
+  .cat-all-row {
+    background: var(--card2); border: 2px solid var(--border);
+    border-radius: 14px; padding: 0.75rem 1rem;
+    cursor: pointer; transition: all 0.18s;
+    display: flex; align-items: center; gap: 0.75rem;
+    font-family: 'Nunito', sans-serif; margin-bottom: 0.75rem;
+  }
+  .cat-all-row:hover { border-color: var(--accent2); background: var(--accent-light); }
+  .cat-all-row.selected { border-color: var(--accent); background: var(--accent-light); }
+  .cat-all-row .cat-check { background: var(--accent); color: #fff; }
+  .cat-sel-summary {
+    font-size: 0.82rem; color: var(--text2); text-align: center;
+    margin-bottom: 1rem; min-height: 1.2em;
+  }
+  .cat-sel-summary span { color: var(--accent); font-weight: 700; }
 </style>
 </head>
 <body>
@@ -341,22 +389,74 @@
 <div id="startScreen" class="screen active">
   <div class="start-hero animate-in">
     <div class="trophy-icon">🏆</div>
-    <h1>Кто хочет стать<br><span>Экспертом?</span></h1>
+    <div class="abbr-badge">ЭБиМ</div>
+    <h1>Кто <span>Эксперт?</span></h1>
     <p>Проверьте знания в операционном менеджменте, бизнес-процессах, управлении персоналом и качестве сервиса</p>
     <div class="info-grid">
-      <div class="info-card"><div class="icon">❓</div><div class="label">Вопросов</div><div class="val">30</div></div>
+      <div class="info-card"><div class="icon">❓</div><div class="label">Вопросов</div><div class="val" id="infoQCount">30</div></div>
       <div class="info-card"><div class="icon">⭐</div><div class="label">Макс. балл</div><div class="val">3 000</div></div>
       <div class="info-card"><div class="icon">🎯</div><div class="label">Вариантов</div><div class="val">4</div></div>
     </div>
+
     <div class="topics-list">
-      <h3>Темы вопросов</h3>
-      <span class="topic-tag">📊 Операционная модель</span>
-      <span class="topic-tag">⚙️ Бизнес-процессы</span>
-      <span class="topic-tag">🏭 Мощности</span>
-      <span class="topic-tag">👥 Персонал</span>
-      <span class="topic-tag">⭐ Качество сервиса</span>
+      <h3>Выберите категории</h3>
+
+      <div class="cat-all-row selected" id="catAllRow" onclick="toggleAll()">
+        <span style="font-size:1.3rem">🎲</span>
+        <div style="flex:1">
+          <div style="font-size:0.9rem;font-weight:700;color:var(--text)">Все категории</div>
+          <div style="font-size:0.75rem;color:var(--text2)">Случайный микс из всех тем</div>
+        </div>
+        <div class="cat-check" id="catAllCheck">✓</div>
+      </div>
+
+      <div class="cat-grid" id="catGrid">
+        <div class="cat-card" data-cat="📊 Операционная модель" onclick="toggleCat(this)">
+          <span class="cat-icon">📊</span>
+          <div class="cat-info">
+            <div class="cat-name">Операционная модель</div>
+            <div class="cat-count" id="cnt-0"></div>
+          </div>
+          <div class="cat-check">✓</div>
+        </div>
+        <div class="cat-card" data-cat="⚙️ Бизнес-процессы" onclick="toggleCat(this)">
+          <span class="cat-icon">⚙️</span>
+          <div class="cat-info">
+            <div class="cat-name">Бизнес-процессы</div>
+            <div class="cat-count" id="cnt-1"></div>
+          </div>
+          <div class="cat-check">✓</div>
+        </div>
+        <div class="cat-card" data-cat="🏭 Мощности" onclick="toggleCat(this)">
+          <span class="cat-icon">🏭</span>
+          <div class="cat-info">
+            <div class="cat-name">Мощности</div>
+            <div class="cat-count" id="cnt-2"></div>
+          </div>
+          <div class="cat-check">✓</div>
+        </div>
+        <div class="cat-card" data-cat="👥 Персонал" onclick="toggleCat(this)">
+          <span class="cat-icon">👥</span>
+          <div class="cat-info">
+            <div class="cat-name">Персонал</div>
+            <div class="cat-count" id="cnt-3"></div>
+          </div>
+          <div class="cat-check">✓</div>
+        </div>
+        <div class="cat-card" data-cat="⭐ Качество сервиса" onclick="toggleCat(this)" style="grid-column:1/-1">
+          <span class="cat-icon">⭐</span>
+          <div class="cat-info">
+            <div class="cat-name">Качество сервиса</div>
+            <div class="cat-count" id="cnt-4"></div>
+          </div>
+          <div class="cat-check">✓</div>
+        </div>
+      </div>
+
+      <div class="cat-sel-summary" id="catSummary">Выбраны все категории</div>
     </div>
-    <button class="btn btn-primary btn-lg" onclick="startGame()">Начать игру →</button>
+
+    <button class="btn btn-primary btn-lg" id="btnStart" onclick="startGame()">Начать игру →</button>
   </div>
 </div>
 
@@ -1198,8 +1298,89 @@ function shuffle(arr) {
   return a;
 }
 
+// ── CATEGORY SELECTION ──
+const ALL_CATS = [
+  "📊 Операционная модель",
+  "⚙️ Бизнес-процессы",
+  "🏭 Мощности",
+  "👥 Персонал",
+  "⭐ Качество сервиса"
+];
+let selectedCats = new Set(ALL_CATS);
+
+function initCatCounts() {
+  ALL_CATS.forEach((cat, i) => {
+    const count = QUESTIONS.filter(q => q.category === cat).length;
+    const el = document.getElementById('cnt-' + i);
+    if (el) el.textContent = count + ' вопросов';
+  });
+  updateCatSummary();
+}
+
+function toggleAll() {
+  const allSelected = selectedCats.size === ALL_CATS.length;
+  if (allSelected) {
+    // deselect all individual — keep "all" state but can't start
+    // actually: clicking "all" when all selected → do nothing (already all)
+    return;
+  }
+  // select all
+  selectedCats = new Set(ALL_CATS);
+  document.querySelectorAll('.cat-card').forEach(c => c.classList.add('selected'));
+  document.getElementById('catAllRow').classList.add('selected');
+  document.getElementById('catAllCheck').textContent = '✓';
+  updateCatSummary();
+}
+
+function toggleCat(card) {
+  const cat = card.dataset.cat;
+  if (selectedCats.has(cat)) {
+    if (selectedCats.size === 1) return; // keep at least one
+    selectedCats.delete(cat);
+    card.classList.remove('selected');
+  } else {
+    selectedCats.add(cat);
+    card.classList.add('selected');
+  }
+  // sync "all" row
+  const allRow = document.getElementById('catAllRow');
+  const allCheck = document.getElementById('catAllCheck');
+  if (selectedCats.size === ALL_CATS.length) {
+    allRow.classList.add('selected');
+    allCheck.textContent = '✓';
+  } else {
+    allRow.classList.remove('selected');
+    allCheck.textContent = '';
+  }
+  updateCatSummary();
+}
+
+function updateCatSummary() {
+  const summary = document.getElementById('catSummary');
+  const btnStart = document.getElementById('btnStart');
+  if (!summary) return;
+  const total = QUESTIONS.filter(q => selectedCats.has(q.category)).length;
+
+  if (selectedCats.size === ALL_CATS.length) {
+    summary.innerHTML = 'Выбраны все категории';
+  } else {
+    const names = [...selectedCats].map(c => c.replace(/^[^\s]+\s/, ''));
+    summary.innerHTML = `Выбрано: <span>${names.join(', ')}</span> — ${total} вопросов`;
+  }
+
+  if (btnStart) {
+    btnStart.disabled = total < 5;
+    btnStart.style.opacity = total < 5 ? '0.45' : '1';
+  }
+}
+
+// init on load
+document.addEventListener('DOMContentLoaded', initCatCounts);
+
 function startGame() {
-  state.questions = shuffle(QUESTIONS).slice(0, TOTAL_QUESTIONS);
+  const pool = QUESTIONS.filter(q => selectedCats.has(q.category));
+  const count = Math.min(TOTAL_QUESTIONS, pool.length);
+  state.questions = shuffle(pool).slice(0, count);
   state.current = 0;
   state.score = 0;
   state.correct = 0;
@@ -1207,12 +1388,17 @@ function startGame() {
   state.partial = 0;
   state.answered = false;
   state.revealed = false;
+  // update total for this session
+  state.sessionTotal = count;
   showScreen('gameScreen');
   renderLevels();
   renderQuestion();
 }
 
-function showStart() { showScreen('startScreen'); }
+function showStart() {
+  showScreen('startScreen');
+  updateCatSummary();
+}
 
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -1237,9 +1423,10 @@ function renderQuestion() {
   state.revealed = false;
   state.multiSelected = [];
 
-  const pct = (state.current / TOTAL_QUESTIONS) * 100;
+  const total = state.sessionTotal || TOTAL_QUESTIONS;
+  const pct = (state.current / total) * 100;
   document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressLabel').textContent = `Вопрос ${state.current + 1} из ${TOTAL_QUESTIONS}`;
+  document.getElementById('progressLabel').textContent = `Вопрос ${state.current + 1} из ${total}`;
   document.getElementById('qCounter').textContent = `#${state.current + 1}`;
   document.getElementById('scoreBadge').textContent = `⭐ ${state.score} баллов`;
 
@@ -1483,7 +1670,8 @@ function showFeedback(q, pts, resultType, wrongTexts) {
 
 function nextQuestion() {
   state.current++;
-  if (state.current >= TOTAL_QUESTIONS) {
+  const total = state.sessionTotal || TOTAL_QUESTIONS;
+  if (state.current >= total) {
     showResults();
   } else {
     renderQuestion();
@@ -1492,9 +1680,11 @@ function nextQuestion() {
 
 function showResults() {
   showScreen('resultScreen');
-  const maxScore = TOTAL_QUESTIONS * 100;
+  const total = state.sessionTotal || TOTAL_QUESTIONS;
+  const maxScore = total * 100;
   const pct = Math.round((state.score / maxScore) * 100);
-  const accuracy = Math.round((state.correct / TOTAL_QUESTIONS) * 100);
+  const accuracy = Math.round((state.correct / total) * 100);
+  document.getElementById('resultSubtitle').textContent = `Вы прошли все ${total} вопросов`;
 
   document.getElementById('finalScore').textContent = state.score;
   document.getElementById('statCorrect').textContent = state.correct;
