@@ -1,0 +1,56 @@
+# Static single-page game (index.html). Deployment is handled by the Vercel Git
+# integration (expert-game.vercel.app), so this workflow only checks the page.
+name: CI
+
+on:
+  push:
+    paths-ignore: ['**/*.md', 'docs/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
+jobs:
+  static:
+    name: Static checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      # The game logic lives in inline <script> blocks — check they parse.
+      - name: Syntax-check inline scripts
+        run: |
+          node --input-type=module - $(git ls-files '*.html') <<'EOF'
+          import { readFileSync, writeFileSync, mkdtempSync } from 'node:fs'
+          import { execFileSync } from 'node:child_process'
+          import { tmpdir } from 'node:os'
+          import { join } from 'node:path'
+          const dir = mkdtempSync(join(tmpdir(), 'inline-js-'))
+          let n = 0
+          for (const file of process.argv.slice(2)) {
+            const html = readFileSync(file, 'utf8')
+            for (const [, attrs, code] of html.matchAll(/<script(?![^>]*\bsrc=)([^>]*)>([\s\S]*?)<\/script>/gi)) {
+              if (/type\s*=\s*["']?application\/(ld\+)?json/i.test(attrs)) continue
+              const out = join(dir, `${n++}${/type\s*=\s*["']?module/i.test(attrs) ? '.mjs' : '.js'}`)
+              writeFileSync(out, code)
+              console.log(`${file}: inline script #${n}`)
+              execFileSync(process.execPath, ['--check', out], { stdio: 'inherit' })
+            }
+          }
+          console.log(`OK: ${n} inline script(s)`)
+          EOF
+
+      - name: Check local links and assets
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: --offline --no-progress '**/*.html'
+          fail: true
